@@ -11,33 +11,24 @@ import com.google.gson.JsonObject;
 public class NewsApiReader {
     private static String urlString;
     // 0 = New Yorker, 1 = WSJ, 2 = some right source
-    private int[] sources = new int[2];
-    private String q,
-        source;
-
-    public NewsApiReader(String querry, String source){
-        this.q = querry;
-        this.source = source;
-    }
+    public static final String[][] sources = new String[3][4]; // {"newyorker.com", "wsj.com", "nypost.com"};
+    public static final String API_KEY = "46e2c3a4dce646d48371cc4391690830";
+    public static final int HITS = 3;
 
 
-    private static final String API_KEY = "46e2c3a4dce646d48371cc4391690830"; // Replace with your actual API key
-    //private static final String BASE_URL = "https://newsapi.org/v2/top-headlines";
-    private static final String BASE_URL = "https://newsapi.org/v2";
-
-    public static void main(String[] args) {
+    public static void request(String q, int source) {
         try {
+            sources[0][0] = "newyorker.com";
+            sources[1][0] = "wsj.com";
+            sources[2][0] = "nypost.com";
 
-            String country = "us"; // Example: United States
-            String category = "general"; // Example: Technology
-            String q = "trump";
-           // String urlString = BASE_URL + "?country=" + country + "&category=" + category + "&apiKey=" + API_KEY;
+
+            // New yorker url
+            String urlString = "https://newsapi.org/v2/everything?domains=" + sources[source][0] + "&q=" + q + "&sortBy=relevance" +"&pageSize=" + HITS + "&apiKey=" + API_KEY;
+
 
             // WSJ url
             // String urlString = "https://newsapi.org/v2/everything?domains=wsj.com&q=q&apiKey=" + API_KEY;
-
-            // New yorker url
-            String urlString = "https://newsapi.org/v2/everything?domains=newyorker.com&q=q&apiKey=" + API_KEY;
 
             // The new york post or the free press -- not on api
             // String urlString = "https://newsapi.org/v2/everything?domains=wsj.com/opinion&q=q&apiKey=" + API_KEY;
@@ -73,7 +64,7 @@ public class NewsApiReader {
         }
     }
 
-    private static void processJson(String json) {
+    public static void processJson(String json) {
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
 
@@ -84,16 +75,16 @@ public class NewsApiReader {
                 String title = article.get("title").getAsString();
                 String description = article.has("description") && !article.get("description").isJsonNull() ? article.get("description").getAsString() : "No description available";
                 String url = article.get("url").getAsString();
-                String publishedAt = article.get("publishedAt").getAsString();
 
                 System.out.println("Title: " + title);
                 System.out.println("Description: " + description);
                 System.out.println("URL: " + url);
-                System.out.println("Published At: " + publishedAt);
                 System.out.println("------------------------------------");
             }
         } else {
             System.out.println("API Error: " + jsonObject.get("message").getAsString());
         }
     }
+
+
 }
