@@ -8,11 +8,11 @@ public class NewsFeed {
 
     // Constructor
     public NewsFeed(){
-        System.out.println("Enter a one-word query about a topic you are interested in: ");
-        String q = input.nextLine();
-        for(int i = 0; i < 3; i++){
-            NewsApiReader.request(q, i);
-        }
+//        System.out.println("Enter a one-word query about a topic you are interested in: ");
+//        String q = input.nextLine();
+//        for(int i = 0; i < 3; i++){
+//            NewsApiReader.request(q, i);
+//        }
 
 
 

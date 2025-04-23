@@ -27,16 +27,6 @@ public class NewsApiReader {
             String urlString = "https://newsapi.org/v2/everything?domains=" + sources[source][0] + "&q=" + q + "&sortBy=relevance" +"&pageSize=" + HITS + "&apiKey=" + API_KEY;
 
 
-            // WSJ url
-            // String urlString = "https://newsapi.org/v2/everything?domains=wsj.com&q=q&apiKey=" + API_KEY;
-
-            // The new york post or the free press -- not on api
-            // String urlString = "https://newsapi.org/v2/everything?domains=wsj.com/opinion&q=q&apiKey=" + API_KEY;
-
-
-
-
-
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -51,7 +41,7 @@ public class NewsApiReader {
                 }
                 reader.close();
 
-                processJson(response.toString());
+                processJson(response.toString(), source);
 
             } else {
                 System.out.println("Error: " + responseCode);
@@ -64,7 +54,7 @@ public class NewsApiReader {
         }
     }
 
-    public static void processJson(String json) {
+    public static void processJson(String json, int source) {
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
 
@@ -75,6 +65,7 @@ public class NewsApiReader {
                 String title = article.get("title").getAsString();
                 String description = article.has("description") && !article.get("description").isJsonNull() ? article.get("description").getAsString() : "No description available";
                 String url = article.get("url").getAsString();
+                sources[source][i+1] = title;
 
                 System.out.println("Title: " + title);
                 System.out.println("Description: " + description);

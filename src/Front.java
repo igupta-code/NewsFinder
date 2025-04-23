@@ -24,12 +24,6 @@ public class Front extends JFrame {
         setSize(800, 600); // Increased size to accommodate columns
         setLocationRelativeTo(null);
 
-        // Initialize data
-//        newsData = new String[2][2];
-//
-//        newsData.put("Source A", List.of("Article A1", "Article A2", "Article A3"));
-//        newsData.put("Source B", List.of("Article B1", "Article B2", "Article B3"));
-//        newsData.put("Source C", List.of("Article C1", "Article C2", "Article C3"));
 
         // Create components
         keywordTextField = new JTextField(20);
@@ -55,7 +49,10 @@ public class Front extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String keyword = keywordTextField.getText().trim();
-                filterAndDisplayArticles(keyword);
+                for(int i = 0; i < 3; i++){
+                    NewsApiReader.request(keyword, i);
+                }
+                displaySourcesAndArticles();
             }
         });
 
@@ -65,6 +62,7 @@ public class Front extends JFrame {
     private void displaySourcesAndArticles() {
         sourcesPanel.removeAll(); // Clear previous content
 
+        // Prints all three Columns
         for(int i = 0; i < 3; i++){
 
             // Prints border and source titles
@@ -74,59 +72,17 @@ public class Front extends JFrame {
             sourceColumn.setBorder(BorderFactory.createTitledBorder(sourceName));
 
             // Prints articles
-            JList<String> articleList = new JList<>(Arrays.copyOfRange(NewsApiReader.sources[i], 1, 3));
+            JList<String> articleList = new JList<>(Arrays.copyOfRange(NewsApiReader.sources[i], 1, 4));
             sourceColumn.add(new JScrollPane(articleList), BorderLayout.CENTER);
 
             sourcesPanel.add(sourceColumn);
-
         }
-//        for (Map.Entry<String, List<String>> entry : dataToShow.entrySet()) {
-//            String sourceName = entry.getKey();
-//            List<String> articles = entry.getValue();
-//
-//            JPanel sourceColumn = new JPanel();
-//            sourceColumn.setLayout(new BorderLayout());
-//            sourceColumn.setBorder(BorderFactory.createTitledBorder(sourceName)); // Add border for source name
-//
-//            JList<String> articleList = new JList<>(articles.toArray(new String[0]));
-//            sourceColumn.add(new JScrollPane(articleList), BorderLayout.CENTER);
-//
-//            sourcesPanel.add(sourceColumn);
-//            columnCount++;
-//
-//            // If we have less than 3 sources, add empty panels to fill the grid
-//            while (columnCount < 3 && dataToShow.size() < 3) {
-//                sourcesPanel.add(new JPanel()); // Empty panel
-//                columnCount++;
-//            }
-//        }
 
         sourcesPanel.revalidate();
         sourcesPanel.repaint();
     }
 
-    private void filterAndDisplayArticles(String keyword) {
-        displaySourcesAndArticles();
-//        Map<String, List<String>> filteredData = new HashMap<>();
-//
-//        for (Map.Entry<String, List<String>> entry : newsData.entrySet()) {
-//            String sourceName = entry.getKey();
-//            List<String> allArticles = entry.getValue();
-//            List<String> filteredArticles = new ArrayList<>();
-//
-//            for (String article : allArticles) {
-//                if (article.toLowerCase().contains(keyword.toLowerCase())) {
-//                    filteredArticles.add(article);
-//                }
-//            }
-//
-//            if (!filteredArticles.isEmpty()) {
-//                filteredData.put(sourceName, filteredArticles);
-//            }
-//        }
-//
-//        displaySourcesAndArticles(filteredData);
-    }
+}
 
     // Get rid of this later
 //    public static void main(String[] args) {
@@ -136,4 +92,3 @@ public class Front extends JFrame {
 //            }
 //        });
 //    }
-}
