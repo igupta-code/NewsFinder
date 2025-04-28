@@ -19,7 +19,7 @@ public class NewsApiReader {
     public static void request(String q, int source) {
         try {
             sources[0][0] = "newyorker.com";
-            sources[1][0] = "wsj.com";
+            sources[1][0] = "forbes.com";
             sources[2][0] = "nypost.com";
 
 

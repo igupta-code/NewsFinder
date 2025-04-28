@@ -42,6 +42,8 @@ public class Front extends JFrame {
         // Add components to the main frame
         // getContentPane().setLayout(new BorderLayout());
         getContentPane().add(inputPanel, BorderLayout.NORTH);
+        // added
+        getContentPane().add(inputPanel, BorderLayout.NORTH);
         getContentPane().add(new JScrollPane(sourcesPanel), BorderLayout.CENTER); // Add scroll pane for all sources
 
         // Add action listener for the search button
