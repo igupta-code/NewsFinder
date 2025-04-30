@@ -10,7 +10,7 @@ import com.google.gson.JsonObject;
 
 public class NewsApiReader {
     private static String urlString;
-    // 0 = New Yorker, 1 = WSJ, 2 = some right source
+    // 0 = New Yorker, 1 = Forbes, 2 = NYpost
     public static final String[][] sources = new String[3][4]; // {"newyorker.com", "wsj.com", "nypost.com"};
     public static final String API_KEY = "46e2c3a4dce646d48371cc4391690830";
     public static final int HITS = 3;

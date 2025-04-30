@@ -1,9 +1,10 @@
 import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLOutput;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,17 +14,31 @@ import org.jsoup.select.Elements;
 
 public class NewsFeed {
     private Scanner input = new Scanner(System.in);
+    public static final Set<String> STOP_WORDS = loadStopWords("test_files/stopwords.txt");
+    
 
 
     // Constructor
     public NewsFeed(){
-//        System.out.println("Enter a one-word query about a topic you are interested in: ");
-//        String q = input.nextLine();
-//        for(int i = 0; i < 3; i++){
-//            NewsApiReader.request(q, i);
-//        }
-
         Front front = new Front(this);
+    }
+
+    public static Set<String> loadStopWords(String filePath) {
+        Set<String> stopWords = new HashSet<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath), 1024)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Assuming each stop word is on a new line in the file
+                String word = line.trim().toLowerCase(); // Trim whitespace and convert to lowercase for consistency
+                if (!word.isEmpty()) {
+                    stopWords.add(word);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading stop words file: " + filePath + " - " + e.getMessage());
+            // You might want to handle this exception differently, e.g., return an empty set or throw it.
+        }
+        return stopWords;
     }
 
     // Gemini code that gets articles
@@ -54,14 +69,26 @@ public class NewsFeed {
         }
     }
 
-    public static String filterArticle(String article){
+    public static List<String> filterArticle(String article){
+        // Takes out special characters, makes lowercase, and converts to list
         article = article.toLowerCase();
         article = article.replaceAll("[^a-z\\s]", "");
         List<String> words = Arrays.asList(article.split("\\s+"));
         System.out.println("------------");
         System.out.println(words);
         System.out.println("------------");
-        return article;
+
+        // Filters out most common words from article
+        
+        words = words.stream().filter(token ->  !token.isEmpty() && !STOP_WORDS.contains(token)).collect(Collectors.toList());
+        System.out.println(words);
+        return words.stream().filter(token ->  !token.isEmpty() && !STOP_WORDS.contains(token)).collect(Collectors.toList());
+
+        // return article;
+
+
+
+
     }
 
     // Main method
