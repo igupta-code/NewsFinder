@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Front extends JFrame {
 
         setTitle("News Feed Generator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600); // Increased size to accommodate columns
+        setSize(1600, 1200); // Increased size to accommodate columns
         setLocationRelativeTo(null);
 
 
@@ -73,9 +74,22 @@ public class Front extends JFrame {
             sourceColumn.setLayout(new BorderLayout());
             sourceColumn.setBorder(BorderFactory.createTitledBorder(sourceName));
 
-            // Prints articles
-            JList<String> articleList = new JList<>(Arrays.copyOfRange(NewsApiReader.sources[i], 1, 4));
-            sourceColumn.add(new JScrollPane(articleList), BorderLayout.CENTER);
+            // Prints articles in the Column
+            JList<String> articleList;
+            DefaultListModel<String> listModel = new DefaultListModel<>();
+            for(int j = 0; j < NewsApiReader.HITS; j++){
+                listModel.addElement(NewsApiReader.sources[i][j+1]);
+                // Get frequent words
+                String url = NewsApiReader.urls[i][j];
+                try {String[] frequentWords = NewsFeed.getRepeatedWords(url);}
+                catch (IOException e){ System.exit(0);}
+
+
+
+
+            }
+            articleList = new JList<>(listModel);
+            sourceColumn.add(articleList, BorderLayout.CENTER);
 
             sourcesPanel.add(sourceColumn);
         }
@@ -85,12 +99,3 @@ public class Front extends JFrame {
     }
 
 }
-
-    // Get rid of this later
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                new Front();
-//            }
-//        });
-//    }

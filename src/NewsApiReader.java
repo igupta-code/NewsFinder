@@ -12,6 +12,8 @@ public class NewsApiReader {
     private static String urlString;
     // 0 = New Yorker, 1 = Forbes, 2 = NYpost
     public static final String[][] sources = new String[3][4]; // {"newyorker.com", "wsj.com", "nypost.com"};
+    public static final String[][] urls = new String[3][3];
+    // j = 0 --> sources, j = 1 -->
     public static final String API_KEY = "46e2c3a4dce646d48371cc4391690830";
     public static final int HITS = 3;
 
@@ -66,6 +68,7 @@ public class NewsApiReader {
                 String description = article.has("description") && !article.get("description").isJsonNull() ? article.get("description").getAsString() : "No description available";
                 String url = article.get("url").getAsString();
                 sources[source][i+1] = title;
+                urls[source][i] = url;
 
                 System.out.println("Title: " + title);
                 System.out.println("Description: " + description);
